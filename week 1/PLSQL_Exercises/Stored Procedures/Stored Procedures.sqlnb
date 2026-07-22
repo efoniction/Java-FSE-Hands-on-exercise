@@ -1,0 +1,125 @@
+cells:
+  - kind: 2
+    value: "CREATE OR REPLACE PROCEDURE ProcessMonthlyInterest\r
+
+      IS\r
+
+      BEGIN\r
+
+      \r
+
+      \    UPDATE Accounts\r
+
+      \    SET Balance = Balance + Balance*0.01\r
+
+      \    WHERE AccountType='Savings';\r
+
+      \r
+
+      \    COMMIT;\r
+
+      \r
+
+      END;\r
+
+      /"
+    languageId: oracle-sql
+  - kind: 2
+    value: "CREATE OR REPLACE PROCEDURE UpdateEmployeeBonus(\r
+
+      \    p_department VARCHAR2,\r
+
+      \    p_bonus NUMBER\r
+
+      )\r
+
+      IS\r
+
+      BEGIN\r
+
+      \r
+
+      \    UPDATE Employees\r
+
+      \    SET Salary = Salary + Salary*p_bonus/100\r
+
+      \    WHERE Department=p_department;\r
+
+      \r
+
+      \    COMMIT;\r
+
+      \r
+
+      END;\r
+
+      /"
+    languageId: oracle-sql
+  - kind: 2
+    value: "CREATE OR REPLACE PROCEDURE TransferFunds(\r
+
+      \    p_from NUMBER,\r
+
+      \    p_to NUMBER,\r
+
+      \    p_amount NUMBER\r
+
+      )\r
+
+      IS\r
+
+      \    v_balance NUMBER;\r
+
+      BEGIN\r
+
+      \r
+
+      \    SELECT Balance\r
+
+      \    INTO v_balance\r
+
+      \    FROM Accounts\r
+
+      \    WHERE AccountID=p_from;\r
+
+      \r
+
+      \    IF v_balance>=p_amount THEN\r
+
+      \r
+
+      \        UPDATE Accounts\r
+
+      \        SET Balance=Balance-p_amount\r
+
+      \        WHERE AccountID=p_from;\r
+
+      \r
+
+      \        UPDATE Accounts\r
+
+      \        SET Balance=Balance+p_amount\r
+
+      \        WHERE AccountID=p_to;\r
+
+      \r
+
+      \        COMMIT;\r
+
+      \r
+
+      \    ELSE\r
+
+      \        DBMS_OUTPUT.PUT_LINE('Insufficient Balance');\r
+
+      \    END IF;\r
+
+      \r
+
+      END;\r
+
+      /"
+    languageId: oracle-sql
+  - kind: 2
+    value: ""
+    languageId: oracle-sql

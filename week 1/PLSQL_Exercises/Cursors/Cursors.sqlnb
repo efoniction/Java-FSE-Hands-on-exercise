@@ -1,0 +1,148 @@
+cells:
+  - kind: 2
+    value: "DECLARE\r
+
+      \r
+
+      CURSOR c1 IS\r
+
+      SELECT c.Name,\r
+
+      \       t.TransactionDate,\r
+
+      \       t.Amount,\r
+
+      \       t.TransactionType\r
+
+      FROM Customers c\r
+
+      JOIN Accounts a\r
+
+      ON c.CustomerID=a.CustomerID\r
+
+      JOIN Transactions t\r
+
+      ON a.AccountID=t.AccountID\r
+
+      WHERE EXTRACT(MONTH FROM t.TransactionDate)\r
+
+      \      =EXTRACT(MONTH FROM SYSDATE);\r
+
+      \r
+
+      BEGIN\r
+
+      \r
+
+      FOR rec IN c1\r
+
+      LOOP\r
+
+      \    DBMS_OUTPUT.PUT_LINE(\r
+
+      \    rec.Name||' '\r
+
+      \    ||rec.TransactionDate||' '\r
+
+      \    ||rec.TransactionType||' '\r
+
+      \    ||rec.Amount);\r
+
+      END LOOP;\r
+
+      \r
+
+      END;\r
+
+      /"
+    languageId: oracle-sql
+  - kind: 2
+    value: "DECLARE\r
+
+      \r
+
+      CURSOR c1 IS\r
+
+      SELECT AccountID\r
+
+      FROM Accounts;\r
+
+      \r
+
+      v_fee NUMBER:=100;\r
+
+      \r
+
+      BEGIN\r
+
+      \r
+
+      FOR rec IN c1\r
+
+      LOOP\r
+
+      \r
+
+      UPDATE Accounts\r
+
+      SET Balance=Balance-v_fee\r
+
+      WHERE AccountID=rec.AccountID;\r
+
+      \r
+
+      END LOOP;\r
+
+      \r
+
+      COMMIT;\r
+
+      \r
+
+      END;\r
+
+      /"
+    languageId: oracle-sql
+  - kind: 2
+    value: "DECLARE\r
+
+      \r
+
+      CURSOR c1 IS\r
+
+      SELECT LoanID,InterestRate\r
+
+      FROM Loans;\r
+
+      \r
+
+      BEGIN\r
+
+      \r
+
+      FOR rec IN c1\r
+
+      LOOP\r
+
+      \r
+
+      UPDATE Loans\r
+
+      SET InterestRate=InterestRate+0.5\r
+
+      WHERE LoanID=rec.LoanID;\r
+
+      \r
+
+      END LOOP;\r
+
+      \r
+
+      COMMIT;\r
+
+      \r
+
+      END;\r
+
+      /"
+    languageId: oracle-sql

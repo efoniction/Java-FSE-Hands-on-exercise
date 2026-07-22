@@ -1,0 +1,114 @@
+cells:
+  - kind: 2
+    value: "BEGIN\r
+
+      \    FOR rec IN (\r
+
+      \        SELECT c.CustomerID\r
+
+      \        FROM Customers c\r
+
+      \        WHERE FLOOR(MONTHS_BETWEEN(SYSDATE, DOB)/12) > 60\r
+
+      \    )\r
+
+      \    LOOP\r
+
+      \        UPDATE Loans\r
+
+      \        SET InterestRate = InterestRate - 1\r
+
+      \        WHERE CustomerID = rec.CustomerID;\r
+
+      \    END LOOP;\r
+
+      \r
+
+      \    COMMIT;\r
+
+      END;\r
+
+      /"
+    languageId: oracle-sql
+  - kind: 2
+    value: ALTER TABLE Customers ADD IsVIP VARCHAR2(5);
+    languageId: oracle-sql
+  - kind: 2
+    value: "BEGIN\r
+
+      \    FOR rec IN (SELECT CustomerID, Balance FROM Customers)\r
+
+      \    LOOP\r
+
+      \        IF rec.Balance > 10000 THEN\r
+
+      \            UPDATE Customers\r
+
+      \            SET IsVIP = 'TRUE'\r
+
+      \            WHERE CustomerID = rec.CustomerID;\r
+
+      \        ELSE\r
+
+      \            UPDATE Customers\r
+
+      \            SET IsVIP = 'FALSE'\r
+
+      \            WHERE CustomerID = rec.CustomerID;\r
+
+      \        END IF;\r
+
+      \    END LOOP;\r
+
+      \r
+
+      \    COMMIT;\r
+
+      END;\r
+
+      /"
+    languageId: oracle-sql
+  - kind: 2
+    value: "BEGIN\r
+
+      \    FOR rec IN (\r
+
+      \        SELECT c.Name, l.LoanID, l.EndDate\r
+
+      \        FROM Customers c\r
+
+      \        JOIN Loans l\r
+
+      \        ON c.CustomerID = l.CustomerID\r
+
+      \        WHERE l.EndDate BETWEEN SYSDATE AND SYSDATE + 30\r
+
+      \    )\r
+
+      \    LOOP\r
+
+      \        DBMS_OUTPUT.PUT_LINE(\r
+
+      \            'Reminder: Loan '\r
+
+      \            || rec.LoanID\r
+
+      \            || ' for '\r
+
+      \            || rec.Name\r
+
+      \            || ' is due on '\r
+
+      \            || rec.EndDate\r
+
+      \        );\r
+
+      \    END LOOP;\r
+
+      END;\r
+
+      /"
+    languageId: oracle-sql
+  - kind: 2
+    value: ""
+    languageId: oracle-sql

@@ -1,0 +1,28 @@
+cells:
+  - kind: 2
+    value: "create schema ormlearn;\r
+
+      \r
+
+      use ormlearn;\r
+
+      \r
+
+      create table country\r
+
+      (\r
+
+      \    code varchar(2) primary key,\r
+
+      \    name varchar(50)\r
+
+      );\r
+
+      \r
+
+      insert into country values('IN','India');\r
+
+      \r
+
+      insert into country values('US','United States of America');"
+    languageId: oracle-sql

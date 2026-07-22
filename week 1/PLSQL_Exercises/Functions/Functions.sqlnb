@@ -1,0 +1,82 @@
+cells:
+  - kind: 2
+    value: "CREATE OR REPLACE FUNCTION CalculateAge(\r
+
+      \    p_dob DATE\r
+
+      )\r
+
+      RETURN NUMBER\r
+
+      IS\r
+
+      BEGIN\r
+
+      \    RETURN FLOOR(MONTHS_BETWEEN(SYSDATE,p_dob)/12);\r
+
+      END;\r
+
+      /"
+    languageId: oracle-sql
+  - kind: 2
+    value: "CREATE OR REPLACE FUNCTION CalculateMonthlyInstallment(\r
+
+      \    p_amount NUMBER,\r
+
+      \    p_rate NUMBER,\r
+
+      \    p_years NUMBER\r
+
+      )\r
+
+      RETURN NUMBER\r
+
+      IS\r
+
+      BEGIN\r
+
+      \    RETURN (p_amount + (p_amount*p_rate*p_years/100))\r
+
+      \            /(p_years*12);\r
+
+      END;\r
+
+      /"
+    languageId: oracle-sql
+  - kind: 2
+    value: "CREATE OR REPLACE FUNCTION HasSufficientBalance(\r
+
+      \    p_account NUMBER,\r
+
+      \    p_amount NUMBER\r
+
+      )\r
+
+      RETURN BOOLEAN\r
+
+      IS\r
+
+      \    v_balance NUMBER;\r
+
+      BEGIN\r
+
+      \r
+
+      \    SELECT Balance\r
+
+      \    INTO v_balance\r
+
+      \    FROM Accounts\r
+
+      \    WHERE AccountID=p_account;\r
+
+      \r
+
+      \    RETURN v_balance>=p_amount;\r
+
+      \r
+
+      END;\r
+
+      /"
+    languageId: oracle-sql

@@ -1,0 +1,154 @@
+cells:
+  - kind: 2
+    value: "CREATE OR REPLACE PROCEDURE SafeTransferFunds(\r
+
+      \    p_from NUMBER,\r
+
+      \    p_to NUMBER,\r
+
+      \    p_amount NUMBER\r
+
+      )\r
+
+      IS\r
+
+      \    v_balance NUMBER;\r
+
+      BEGIN\r
+
+      \r
+
+      \    SELECT Balance\r
+
+      \    INTO v_balance\r
+
+      \    FROM Accounts\r
+
+      \    WHERE AccountID = p_from;\r
+
+      \r
+
+      \    IF v_balance < p_amount THEN\r
+
+      \        RAISE_APPLICATION_ERROR(-20001,'Insufficient Funds');\r
+
+      \    END IF;\r
+
+      \r
+
+      \    UPDATE Accounts\r
+
+      \    SET Balance = Balance - p_amount\r
+
+      \    WHERE AccountID = p_from;\r
+
+      \r
+
+      \    UPDATE Accounts\r
+
+      \    SET Balance = Balance + p_amount\r
+
+      \    WHERE AccountID = p_to;\r
+
+      \r
+
+      \    COMMIT;\r
+
+      \r
+
+      EXCEPTION\r
+
+      \    WHEN OTHERS THEN\r
+
+      \        ROLLBACK;\r
+
+      \        DBMS_OUTPUT.PUT_LINE(SQLERRM);\r
+
+      END;\r
+
+      /"
+    languageId: oracle-sql
+  - kind: 2
+    value: "CREATE OR REPLACE PROCEDURE UpdateSalary(\r
+
+      \    p_empid NUMBER,\r
+
+      \    p_percent NUMBER\r
+
+      )\r
+
+      IS\r
+
+      BEGIN\r
+
+      \r
+
+      \    UPDATE Employees\r
+
+      \    SET Salary = Salary + Salary*p_percent/100\r
+
+      \    WHERE EmployeeID = p_empid;\r
+
+      \r
+
+      \    IF SQL%ROWCOUNT = 0 THEN\r
+
+      \        RAISE NO_DATA_FOUND;\r
+
+      \    END IF;\r
+
+      \r
+
+      \    COMMIT;\r
+
+      \r
+
+      EXCEPTION\r
+
+      \    WHEN NO_DATA_FOUND THEN\r
+
+      \        DBMS_OUTPUT.PUT_LINE('Employee not found.');\r
+
+      END;\r
+
+      /"
+    languageId: oracle-sql
+  - kind: 2
+    value: "CREATE OR REPLACE PROCEDURE AddNewCustomer(\r
+
+      \    p_id NUMBER,\r
+
+      \    p_name VARCHAR2,\r
+
+      \    p_dob DATE,\r
+
+      \    p_balance NUMBER\r
+
+      )\r
+
+      IS\r
+
+      BEGIN\r
+
+      \r
+
+      \    INSERT INTO Customers\r
+
+      \    VALUES(p_id,p_name,p_dob,p_balance,SYSDATE);\r
+
+      \r
+
+      \    COMMIT;\r
+
+      \r
+
+      EXCEPTION\r
+
+      \    WHEN DUP_VAL_ON_INDEX THEN\r
+
+      \        DBMS_OUTPUT.PUT_LINE('Customer already exists.');\r
+
+      END;\r
+
+      /"
+    languageId: oracle-sql

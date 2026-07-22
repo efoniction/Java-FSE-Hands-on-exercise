@@ -1,0 +1,344 @@
+cells:
+  - kind: 2
+    value: "CREATE OR REPLACE PACKAGE CustomerManagement AS\r
+
+      \r
+
+      PROCEDURE AddCustomer(\r
+
+      id NUMBER,\r
+
+      name VARCHAR2,\r
+
+      dob DATE,\r
+
+      bal NUMBER);\r
+
+      \r
+
+      PROCEDURE UpdateCustomer(\r
+
+      id NUMBER,\r
+
+      bal NUMBER);\r
+
+      \r
+
+      FUNCTION GetBalance(\r
+
+      id NUMBER)\r
+
+      RETURN NUMBER;\r
+
+      \r
+
+      END CustomerManagement;\r
+
+      /\r
+
+      \r
+
+      CREATE OR REPLACE PACKAGE BODY CustomerManagement AS\r
+
+      \r
+
+      PROCEDURE AddCustomer(\r
+
+      id NUMBER,\r
+
+      name VARCHAR2,\r
+
+      dob DATE,\r
+
+      bal NUMBER)\r
+
+      IS\r
+
+      BEGIN\r
+
+      INSERT INTO Customers\r
+
+      VALUES(id,name,dob,bal,SYSDATE);\r
+
+      END;\r
+
+      \r
+
+      PROCEDURE UpdateCustomer(\r
+
+      id NUMBER,\r
+
+      bal NUMBER)\r
+
+      IS\r
+
+      BEGIN\r
+
+      UPDATE Customers\r
+
+      SET Balance=bal\r
+
+      WHERE CustomerID=id;\r
+
+      END;\r
+
+      \r
+
+      FUNCTION GetBalance(\r
+
+      id NUMBER)\r
+
+      RETURN NUMBER\r
+
+      IS\r
+
+      v_balance NUMBER;\r
+
+      BEGIN\r
+
+      SELECT Balance INTO v_balance\r
+
+      FROM Customers\r
+
+      WHERE CustomerID=id;\r
+
+      RETURN v_balance;\r
+
+      END;\r
+
+      \r
+
+      END CustomerManagement;\r
+
+      /"
+    languageId: oracle-sql
+  - kind: 2
+    value: "CREATE OR REPLACE PACKAGE EmployeeManagement AS\r
+
+      \r
+
+      PROCEDURE HireEmployee(\r
+
+      id NUMBER,\r
+
+      name VARCHAR2,\r
+
+      pos VARCHAR2,\r
+
+      salary NUMBER,\r
+
+      dept VARCHAR2);\r
+
+      \r
+
+      PROCEDURE UpdateEmployee(\r
+
+      id NUMBER,\r
+
+      salary NUMBER);\r
+
+      \r
+
+      FUNCTION AnnualSalary(\r
+
+      id NUMBER)\r
+
+      RETURN NUMBER;\r
+
+      \r
+
+      END;\r
+
+      /\r
+
+      \r
+
+      CREATE OR REPLACE PACKAGE BODY EmployeeManagement AS\r
+
+      \r
+
+      PROCEDURE HireEmployee(\r
+
+      id NUMBER,\r
+
+      name VARCHAR2,\r
+
+      pos VARCHAR2,\r
+
+      salary NUMBER,\r
+
+      dept VARCHAR2)\r
+
+      IS\r
+
+      BEGIN\r
+
+      INSERT INTO Employees\r
+
+      VALUES(id,name,pos,salary,dept,SYSDATE);\r
+
+      END;\r
+
+      \r
+
+      PROCEDURE UpdateEmployee(\r
+
+      id NUMBER,\r
+
+      salary NUMBER)\r
+
+      IS\r
+
+      BEGIN\r
+
+      UPDATE Employees\r
+
+      SET Salary=salary\r
+
+      WHERE EmployeeID=id;\r
+
+      END;\r
+
+      \r
+
+      FUNCTION AnnualSalary(\r
+
+      id NUMBER)\r
+
+      RETURN NUMBER\r
+
+      IS\r
+
+      v_salary NUMBER;\r
+
+      BEGIN\r
+
+      SELECT Salary INTO v_salary\r
+
+      FROM Employees\r
+
+      WHERE EmployeeID=id;\r
+
+      RETURN v_salary*12;\r
+
+      END;\r
+
+      \r
+
+      END;\r
+
+      /"
+    languageId: oracle-sql
+  - kind: 2
+    value: "CREATE OR REPLACE PACKAGE AccountOperations AS\r
+
+      \r
+
+      PROCEDURE OpenAccount(\r
+
+      id NUMBER,\r
+
+      cust NUMBER,\r
+
+      type VARCHAR2,\r
+
+      bal NUMBER);\r
+
+      \r
+
+      PROCEDURE CloseAccount(\r
+
+      id NUMBER);\r
+
+      \r
+
+      FUNCTION TotalBalance(\r
+
+      cust NUMBER)\r
+
+      RETURN NUMBER;\r
+
+      \r
+
+      END;\r
+
+      /\r
+
+      \r
+
+      CREATE OR REPLACE PACKAGE BODY AccountOperations AS\r
+
+      \r
+
+      PROCEDURE OpenAccount(\r
+
+      id NUMBER,\r
+
+      cust NUMBER,\r
+
+      type VARCHAR2,\r
+
+      bal NUMBER)\r
+
+      IS\r
+
+      BEGIN\r
+
+      INSERT INTO Accounts\r
+
+      VALUES(id,cust,type,bal,SYSDATE);\r
+
+      END;\r
+
+      \r
+
+      PROCEDURE CloseAccount(\r
+
+      id NUMBER)\r
+
+      IS\r
+
+      BEGIN\r
+
+      DELETE FROM Accounts\r
+
+      WHERE AccountID=id;\r
+
+      END;\r
+
+      \r
+
+      FUNCTION TotalBalance(\r
+
+      cust NUMBER)\r
+
+      RETURN NUMBER\r
+
+      IS\r
+
+      v_total NUMBER;\r
+
+      BEGIN\r
+
+      SELECT SUM(Balance)\r
+
+      INTO v_total\r
+
+      FROM Accounts\r
+
+      WHERE CustomerID=cust;\r
+
+      \r
+
+      RETURN NVL(v_total,0);\r
+
+      \r
+
+      END;\r
+
+      \r
+
+      END;\r
+
+      /"
+    languageId: oracle-sql
