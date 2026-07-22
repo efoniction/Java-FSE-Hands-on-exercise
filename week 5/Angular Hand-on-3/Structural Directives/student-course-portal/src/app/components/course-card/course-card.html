@@ -1,0 +1,29 @@
+<div class="card">
+
+  <h3>{{ course.name }}</h3>
+
+  <p><strong>ID:</strong> {{ course.id }}</p>
+
+  <p><strong>Code:</strong> {{ course.code }}</p>
+
+  <p><strong>Credits:</strong> {{ course.credits }}</p>
+
+  <p>
+    <strong>Status:</strong>
+    <span [class.passed]="course.gradeStatus === 'passed'"
+          [class.failed]="course.gradeStatus === 'failed'"
+          [class.pending]="course.gradeStatus === 'pending'">
+      {{ course.gradeStatus === 'passed' ? 'Passed'
+         : course.gradeStatus === 'failed' ? 'Failed'
+         : course.gradeStatus === 'pending' ? 'Pending'
+         : 'Unknown' }}
+    </span>
+  </p>
+
+  <br>
+
+  <button (click)="enroll()">
+    Enroll
+  </button>
+
+</div>
