@@ -1,0 +1,16 @@
+<app-header></app-header>
+
+<a routerLink="/enroll">Enrollment Form</a>
+<br><br>
+
+<a routerLink="/enroll-reactive">Reactive Enrollment Form</a>
+
+<hr>
+
+<div *ngIf="loadingService.isLoading$ | async">
+
+  <h3>Loading...</h3>
+
+</div>
+
+<router-outlet></router-outlet>
