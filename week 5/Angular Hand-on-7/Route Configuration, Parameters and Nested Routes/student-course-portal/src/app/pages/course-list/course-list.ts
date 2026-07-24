@@ -1,46 +1,78 @@
-import { Component, TrackByFunction } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+
 import { CourseCard } from '../../components/course-card/course-card';
 import { HighlightDirective } from '../../directives/highlight';
+import { CourseService } from '../../services/course';
+import { Course } from '../../models/course.model';
 
 @Component({
   selector: 'app-course-list',
   standalone: true,
-  imports: [CommonModule, CourseCard, HighlightDirective],
+  imports: [
+    CommonModule,
+    FormsModule,
+    CourseCard,
+    HighlightDirective
+  ],
   templateUrl: './course-list.html',
   styleUrl: './course-list.css'
 })
-export class CourseList {
+export class CourseList implements OnInit {
 
-  courses = [
-    {
-      id: 1,
-      name: 'Angular',
-      code: 'CS101',
-      credits: 3,
-      gradeStatus: 'passed'
-    },
-    {
-      id: 2,
-      name: 'Java',
-      code: 'CS102',
-      credits: 4,
-      gradeStatus: 'failed'
-    },
-    {
-      id: 3,
-      name: 'Python',
-      code: 'CS103',
-      credits: 2,
-      gradeStatus: 'pending'
+  courses: Course[] = [];
+
+  searchTerm = '';
+
+  selectedCourseId?: number;
+
+  constructor(
+    private courseService: CourseService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
+
+  ngOnInit(): void {
+
+    // Load courses from the CourseService
+    this.courses = this.courseService.getCourses();
+
+    // Read query parameter
+    const search = this.route.snapshot.queryParamMap.get('search');
+
+    if (search) {
+      this.searchTerm = search;
+      console.log('Search:', search);
     }
-  ];
+  }
 
-  trackByCourseId(index: number, course: any): number {
+  // Improves performance by reusing DOM elements
+  trackByCourseId(index: number, course: Course): number {
     return course.id;
   }
 
-  onEnroll(id: number) {
-    console.log(id);
+  onEnroll(courseId: number): void {
+    console.log('Enrolling in course:', courseId);
+    this.selectedCourseId = courseId;
   }
+
+  // Navigate to Course Detail page
+  goToCourse(courseId: number): void {
+    this.router.navigate(['courses', courseId]);
+  }
+
+  // Update URL with search query parameter
+  searchCourses(): void {
+    this.router.navigate(
+      ['courses'],
+      {
+        queryParams: {
+          search: this.searchTerm
+        }
+      }
+    );
+  }
+
 }

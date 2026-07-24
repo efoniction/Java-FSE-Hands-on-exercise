@@ -1,12 +1,28 @@
+<input
+  type="text"
+  [(ngModel)]="searchTerm"
+  placeholder="Search course">
+
+<button (click)="searchCourses()">
+  Search
+</button>
+
+<br><br>
+
 <app-course-card
-    *ngFor="let course of courses; trackBy: trackByCourseId"
-    appHighlight="lightblue"
-    [course]="{
-  id: course.id,
-  name: course.name,
-  code: course.code,
-  credits: course.credits,
-  gradeStatus: course.gradeStatus
-}"
-    (enrollRequested)="onEnroll($event)">
+  *ngFor="let course of courses; trackBy: trackByCourseId"
+  appHighlight="lightblue"
+  [course]="{
+    id: course.id,
+    name: course.name,
+    code: course.code,
+    credits: course.credits,
+    gradeStatus: course.gradeStatus
+  }"
+  (click)="goToCourse(course.id)"
+  (enrollRequested)="onEnroll($event)">
 </app-course-card>
+
+<p *ngIf="selectedCourseId">
+  Selected Course ID: {{ selectedCourseId }}
+</p>

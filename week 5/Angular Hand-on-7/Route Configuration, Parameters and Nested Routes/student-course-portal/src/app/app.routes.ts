@@ -1,12 +1,45 @@
 import { Routes } from '@angular/router';
+
 import { HomeComponent } from './pages/home/home';
+import { StudentProfileComponent } from './pages/student-profile/student-profile';
 import { CourseList } from './pages/course-list/course-list';
-import { EnrollmentForm } from './pages/enrollment-form/enrollment-form';
-import { ReactiveEnrollmentForm } from './pages/reactive-enrollment-form/reactive-enrollment-form';
+import { CourseDetailComponent } from './pages/course-detail/course-detail';
+import { CoursesLayoutComponent } from './pages/courses-layout/courses-layout';
+import { NotFoundComponent } from './pages/not-found/not-found';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'courses', component: CourseList },
-  { path: 'enroll', component: EnrollmentForm },
-  { path: 'enroll-reactive', component: ReactiveEnrollmentForm }
+
+  {
+    path: '',
+    component: HomeComponent
+  },
+
+  {
+    path: 'profile',
+    component: StudentProfileComponent
+  },
+
+  {
+    path: 'courses',
+    component: CoursesLayoutComponent,
+    children: [
+
+      {
+        path: '',
+        component: CourseList
+      },
+
+      {
+        path: ':id',
+        component: CourseDetailComponent
+      }
+
+    ]
+  },
+
+  {
+    path: '**',
+    component: NotFoundComponent
+  }
+
 ];
