@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -28,16 +28,34 @@ export class CourseList implements OnInit {
 
   selectedCourseId?: number;
 
+  isLoading = true;
+
+  errorMessage = '';
+
   constructor(
-    private courseService: CourseService,
+    @Inject(CourseService) private courseService: CourseService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
 
-    // Load courses from the CourseService
-    this.courses = this.courseService.getCourses();
+    // Load courses using HttpClient
+    this.courseService.getCourses().subscribe({
+
+      next: (courses: Course[]) => {
+        this.courses = courses;
+      },
+
+      error: (err: { message: string; }) => {
+        this.errorMessage = err.message;
+      },
+
+      complete: () => {
+        this.isLoading = false;
+      }
+
+    });
 
     // Read query parameter
     const search = this.route.snapshot.queryParamMap.get('search');

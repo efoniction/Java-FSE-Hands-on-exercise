@@ -9,6 +9,14 @@
 
 <br><br>
 
+<p *ngIf="isLoading">
+  Loading...
+</p>
+
+<p *ngIf="errorMessage">
+  {{ errorMessage }}
+</p>
+
 <app-course-card
   *ngFor="let course of courses; trackBy: trackByCourseId"
   appHighlight="lightblue"
